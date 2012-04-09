@@ -23,7 +23,13 @@ public class Game extends Canvas {
 	public boolean gameRunning = true;
 	/** Time elapsed since the last run of the game loop **/
 	private long lastLoopTime;
+	/** Used to know if debugging is enabled (defaults to false) **/
+	public static final boolean DEBUG_ENABLED = false;
 	
+	/**
+	 * Create new Game instance (sets up display and graphics and runs main game loop)
+	 * 
+	 */
 	public Game() {
 		//create frame to contain game
 		JFrame container = new JFrame("Space Invaders - By Jere");
@@ -49,9 +55,16 @@ public class Game extends Canvas {
 		//create buffer strategy to use accelerated graphics method, and we are all set
 		this.createBufferStrategy(2);
 		this.bufferStrategy = this.getBufferStrategy();
+		
+		//run game loop
+		this.gameLoop();
 	}
 	
-	public void gameLoop() {
+	/**
+	 * Runs the game loop.
+	 * 
+	 */
+	private void gameLoop() {
 		while (this.gameRunning) {
 			//calculate how long has it been since the last run of the game loop
 			long delta = System.currentTimeMillis() - this.lastLoopTime;
@@ -61,6 +74,20 @@ public class Game extends Canvas {
 			Graphics2D graphSurface = (Graphics2D) this.bufferStrategy.getDrawGraphics();
 			graphSurface.setColor(Color.BLACK);
 			graphSurface.fillRect(0, 0, RES_X, RES_Y);
+			
+			//this is where accelerated graphics kick in, clear the current surface and draw the new one on screen
+			//(we assume at this point that everything that had to be re-drawn, is already re-drawn)
+			graphSurface.dispose();
+			this.bufferStrategy.show();
+			
+			//pause for a bit (this value should keep us at about 100fps)
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				if (DEBUG_ENABLED) {
+					e.printStackTrace();					
+				}				
+			}
 		}
 	}
 }
