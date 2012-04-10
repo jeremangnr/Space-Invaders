@@ -24,10 +24,10 @@ public class Game extends Canvas {
 	/** Used to know if debugging is enabled (defaults to false) **/
 	public static final boolean DEBUG_ENABLED = false;
 	
+	/** Ship entity representing the player **/
+	private Entity ship;
 	/** Indicates whether the game is running or not (defaults to true) **/
 	public boolean gameRunning = true;
-	/** Time elapsed since the last run of the game loop **/
-	private long lastLoopTime;
 	/** List containing all the present entities **/
 	private List<Entity> entities;
 	
@@ -64,8 +64,29 @@ public class Game extends Canvas {
 		this.createBufferStrategy(2);
 		this.bufferStrategy = this.getBufferStrategy();
 		
-		// run game loop
-		this.gameLoop();
+		// initialize entities
+		this.initEntities();
+	}
+	
+	/**
+	 * Initialize entities (create aliens and ship)
+	 * 
+	 */
+	private void initEntities() {
+		// create player entity and place it in the center of the screen
+		this.ship = new ShipEntity(this, "sprites/ship.gif", 370, 550);
+		entities.add(ship);
+		
+		// create a block of aliens (5 rows of 12 aliens each, spaced evenly)
+		int alienCount = 0;
+		for (int row = 0; row < 5; row++) {
+			for (int x = 0; x < 12; x++) {
+				Entity alien = new AlienEntity(this, "sprites/alien.gif", 100 + (x * 50), (50) + row * 30);
+				
+				entities.add(alien);
+				alienCount++;
+			}
+		}
 	}
 	
 	/**
@@ -73,10 +94,13 @@ public class Game extends Canvas {
 	 * 
 	 */
 	private void gameLoop() {
+		// we'll store the time difference between each loop here.
+		long lastLoopTime = System.currentTimeMillis();
+		
 		while (this.gameRunning) {
 			// calculate how long it's been since the last run of the game loop
-			long delta = System.currentTimeMillis() - this.lastLoopTime;
-			this.lastLoopTime = System.currentTimeMillis();
+			long delta = System.currentTimeMillis() - lastLoopTime;
+			lastLoopTime = System.currentTimeMillis();
 
 			// get the current graphics surface and blank it out (black it out, actually)
 			Graphics2D graphSurface = (Graphics2D) this.bufferStrategy.getDrawGraphics();
@@ -109,8 +133,19 @@ public class Game extends Canvas {
 				
 				if (DEBUG_ENABLED) {
 					e.printStackTrace();
-				}				
+				}
+				
+				System.exit(0);
 			}
 		}
+	}
+	
+	/**
+	 * Runs the main game loop.
+	 * 
+	 */
+	public void startGame() {
+		// run game loop
+		this.gameLoop();
 	}
 }

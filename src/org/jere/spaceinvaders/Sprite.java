@@ -42,6 +42,6 @@ public class Sprite {
 	 * @param y The y location at which to draw the sprite
 	 */
 	public void draw(Graphics gSurface, int x, int y) {
-		
+		gSurface.drawImage(this.image, x, y, null);
 	}
 }

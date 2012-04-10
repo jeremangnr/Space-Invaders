@@ -13,8 +13,11 @@ public class Entity {
 	protected double dy;
 	/** Visual representation of the entity (Sprite) **/
 	protected Sprite sprite;
+	/** The entity needs to be aware of the game it exists in **/
+	private Game game;
 	
-	public Entity(String spriteRef, double pX, double pY) {
+	public Entity(Game pGame, String spriteRef, double pX, double pY) {
+		this.game = pGame;
 		this.sprite = SpriteStore.getInstance().getSprite(spriteRef);
 		this.x = pX;
 		this.y = pY;

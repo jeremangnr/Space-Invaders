@@ -59,6 +59,8 @@ public class SpriteStore {
 						"The specified resource '" + path + "' was not found",
 						"Sorry!",
 						JOptionPane.ERROR_MESSAGE);
+				
+				System.exit(0);
 			}
 
 			// here we actually load the image
@@ -72,6 +74,8 @@ public class SpriteStore {
 			if (Game.DEBUG_ENABLED) {
 				e.printStackTrace();				
 			}
+			
+			System.exit(0);
 		}
 		
 		// this will allow us to ONLY use the GPU to draw the image, taking the load of the CPU.
@@ -86,6 +90,8 @@ public class SpriteStore {
 		
 		// create the sprite, add it to cache, and return it
 		Sprite sprite = new Sprite(image);
-		return this.sprites.put(path, sprite);
+		this.sprites.put(path, sprite);
+		
+		return sprite;
 	}
 }
