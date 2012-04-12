@@ -20,6 +20,9 @@ public class SpriteStore {
 	/** Stores already cached sprites **/
 	private Map<String, Sprite> sprites;
 
+	/**
+	 * Create sinle instance of the SpriteStore
+	 */
 	private SpriteStore() {
 		this.sprites = new HashMap<String, Sprite>();
 	}
