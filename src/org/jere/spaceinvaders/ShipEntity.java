@@ -29,4 +29,19 @@ public class ShipEntity extends Entity {
 		// after checking if we've moved out of bounds, move.
 		super.move(delta);
 	}
+	/**
+	 * Notification that the player's ship has collided with something
+	 * 
+	 * @param other The entity with which the ship has collided with
+	 */
+	public void collidedWith(Entity other) {
+		// if we collide with an alien, the game is over
+		if (other instanceof AlienEntity) {
+			game.notifyPlayerDeath();
+		}
+	}
+	
+	public void doLogic() {
+		
+	}
 }

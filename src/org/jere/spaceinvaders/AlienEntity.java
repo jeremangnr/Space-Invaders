@@ -2,7 +2,9 @@ package org.jere.spaceinvaders;
 
 public class AlienEntity extends Entity {
 	/** The speed at which the aliens will move horizontally by default (pixels/sec) **/
-	private int moveSpeed = 75;
+	private double moveSpeed = 75;
+	/** Percentage at which the alien's horizontal movement will speed when another alien is shot (2%) **/
+	private double speedUpPercentage = 1.02;
 	
 	/**
 	 * Creates a new Alien Entity
@@ -19,19 +21,42 @@ public class AlienEntity extends Entity {
 		this.dx = -this.moveSpeed;
 	}
 	
+	/**
+	 * Speeds the alien's horizontal movement by a certain percentage
+	 * 
+	 */
+	public void speedUp() {
+		this.setXSpeed(this.dx * this.speedUpPercentage);
+	}
+	
 	@Override
 	public void move(long delta) {
 		// if we're moving left and we are on the left-most edge of the screen, we want the aliens to move another row down,
 		// but to do this we first need to update the game logic to check some things
 		if (dx < 0 && this.x < 10) {
-			//game.updateLogic();
+			game.updateLogic();
 		}
 		
 		// same for the right edge
 		if (dx > 0 && this.x > 750) {
-			//game.updateLogic();
+			game.updateLogic();
 		}
 		
 		super.move(delta);
+	}
+	
+	public void collidedWith(Entity other) {
+		// aliens don't need to notify anyone when they collide, until now at least
+	}
+	
+	public void doLogic() {
+		// swap over horizontal movement and move down the screen a bit
+		this.dx = -this.dx;
+		this.y += 10;
+		
+		// if we've reached the bottom of the screen then the player dies
+		if (y > 570) {
+			game.notifyPlayerDeath();
+		}
 	}
 }

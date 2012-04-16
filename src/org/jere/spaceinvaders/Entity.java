@@ -1,8 +1,9 @@
 package org.jere.spaceinvaders;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
-public class Entity {
+public abstract class Entity {
 	/** X position of this entity **/
 	protected double x;
 	/** Y position of this entity **/
@@ -15,6 +16,10 @@ public class Entity {
 	protected Sprite sprite;
 	/** The entity needs to be aware of the game world it exists in **/
 	protected Game game;
+	/** Rectangle used as bounding-box for collision detection of THIS entiy **/
+	protected Rectangle me = new Rectangle();
+	/** Rectangle used as bounding-box for collision detection of the entiy I'm colliding with **/
+	protected Rectangle him = new Rectangle();
 	
 	/**
 	 * Creates an entity based on a sprite (a reference to it) and places it at X, Y coordinates
@@ -123,4 +128,33 @@ public class Entity {
 	public void draw(Graphics g) {
 		this.sprite.draw(g, (int) this.x, (int) this.y);
 	}
+	
+	/**
+	 * Checks if an entity collides with another one based on whether their rectangle bounding-boxes
+	 * intersect or not.
+	 * 
+	 * @param other The entity we're checking for collisions with.
+	 * @return True if we collide with the other entity.
+	 */
+	public boolean collidesWith(Entity other) {
+		this.me.setBounds((int) this.x, (int) this.y, this.sprite.getWidth(), this.sprite.getHeight());
+		this.him.setBounds((int) other.x, (int) other.y, other.sprite.getWidth(), other.sprite.getHeight());
+		
+		return me.intersects(him);
+	}
+	
+	/**
+	 * Notification that the entity has collided with something. It's implementation is based on
+	 * the entity (different entities will react differently to collisions)
+	 * 
+	 * @param other The entity against which we collided
+	 */
+	public abstract void collidedWith(Entity other);
+	
+	/**
+	 * Each entity (subclass of it) is able to implement some basic logic that will be run when requested
+	 * in the game loop.
+	 * 
+	 */
+	public abstract void doLogic();
 }

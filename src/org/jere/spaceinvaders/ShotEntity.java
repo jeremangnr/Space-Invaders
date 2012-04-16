@@ -1,7 +1,10 @@
 package org.jere.spaceinvaders;
 
 public class ShotEntity extends Entity {
+	/** The speed at which the shots will move **/
 	private int shotSpeed = 300;	
+	/** Indicates if the shot has already hit something, used to prevent double kills **/
+	private boolean used = false;
 	
 	/**
 	 * Creates a new Shot Entity
@@ -27,5 +30,30 @@ public class ShotEntity extends Entity {
 		if (y < -100) {
 			this.game.removeEntity(this);
 		}
+	}
+	
+	/**
+	 * Notifies that the shot entity has collided with something
+	 * 
+	 * @param other The entity it has collided with
+	 */
+	public void collidedWith(Entity other) {
+		// used to avoid one shot killing 2 aliens
+		if (this.used) {
+			return;
+		}
+		// if it's an alien, we want both the shot and the alien to disappear
+		if (other instanceof AlienEntity) {
+			this.game.removeEntity(this);
+			this.game.removeEntity(other);
+			this.used = true;
+			
+			// let the game world know what's going on
+			this.game.notifyAlienKilled();
+		}
+	}
+	
+	public void doLogic() {
+		
 	}
 }
