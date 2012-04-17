@@ -333,9 +333,7 @@ public class Game extends Canvas {
 	 * @author jere
 	 *
 	 */
-	private class KeyInputHandler extends KeyAdapter {
-		/** The number of key presses we've had while waiting for "any key to be pressed" **/
-		private int pressCount = 1;
+	private class KeyInputHandler extends KeyAdapter {		
 		/**
 		 * Handles the event of a key being pressed down
 		 * 
@@ -402,13 +400,8 @@ public class Game extends Canvas {
 			// have had a keyType() event from the user releasing the shoot or move keys, hence 
 			// the use of the "pressCount" counter.
 			if (waitingForKeyPress) {
-				if (pressCount == 1) {
-					waitingForKeyPress = false;
-					resetGame();
-					pressCount = 0;
-				} else {
-					pressCount++;
-				}
+				waitingForKeyPress = false;
+				resetGame();
 			}
 					
 			// we'll quit the game when escape is typed
